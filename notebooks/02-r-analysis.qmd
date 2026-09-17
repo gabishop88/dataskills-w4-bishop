@@ -1,0 +1,201 @@
+---
+title: "Data Skills Week 4 - R Analysis"
+date: "2026-09-01"
+format: 
+  html:
+      embed-resources: true
+---
+
+## Step 0: Installing packages
+
+Install packages by running the following chunk (click the green triangle):
+
+```{r}
+# Install pacman if you don't have it
+if (!requireNamespace("pacman", quietly = TRUE)) install.packages("pacman")
+
+# Installs (if needed) and loads all listed packages
+pacman::p_load(morrowplots, ggplot2, dplyr, renv, here)
+```
+
+## Step 1: Setting up - the YAML header
+
+Let's look at the YAML header. Notice there is a `date` field. Render the document and examine how the `date` field is rendered. This is when the document was first authored. Since we are modifying it today, let's add another line to the header with today's date. Add the following to the header:
+
+date-modified: "2026-09-17"
+
+Now re-render the document. Answer the following question:
+
+*Q1. What happened when you added the `date-modified` line to the YAML header? Keep the > symbol in your answer.*
+
+> YOUR ANSWER HERE
+
+Let's add some more information. Add your name via an `author:` tag, as well as a very brief `abstract:`. Both of these should go in the YAML header below your date lines. Click render and observe the result.
+
+You can read more about the many options for HTML files [here](https://quarto.org/docs/reference/formats/html.html).
+
+## Step 2: Analysis
+
+Let's run a basic analysis and output some results. Read and run the chunk below.
+
+```{r}
+# Let's examine the morrowplots data
+
+# Look at first few rows
+head(morrowplots)
+
+# Output a summary of different column variables
+summary(morrowplots)
+```
+
+Create a code chunk using the code below and save the `morrowplots` data frame as a CSV file in your project directory in an appropriate location. This assumes you have a `data` directory in your project; modify as needed. Note the use of the `here` package, which helps simplify relative file paths.
+
+write.csv(morrowplots,here("data","morrowplots.csv"))
+
+> ADD CODE CHUNK HERE WITH ABOVE CODE
+
+### Inserting text inline using code
+
+We can insert text into our writing by providing R code inline. For example, if I wanted to write a sentence about the size of the `morrowplots` dataset, I could do the following:
+
+The `morrowplots` dataset has `r nrow(morrowplots)` rows and `r ncol(morrowplots)` columns.
+
+*Q2. Render the document. Which values were inserted when you rendered the line above? (Keep the > symbol in your answer.)*
+
+> YOUR ANSWER HERE
+
+### Generating some plots
+
+Let's make some plots. We'll use the packages `ggplot2` and `dplyr` for this.
+
+We are going to make some visualizations from the `morrowplots` [vignette](https://cran.r-project.org/web/packages/morrowplots/vignettes/morrow-plots-data-visualizations.html). Note that the following code chunk has two parameters specified (`label` and `echo`). The `label` parameter names the chunk.
+
+```{r}
+#| label: corn-yield-trends
+#| echo: true
+
+## Filter the dataset to only include corn
+mpcorn <- 
+  
+  ## filter to only include rows where corn is TRUE and 'yield_bush' is not 'NA'
+  dplyr::filter(morrowplots, corn == TRUE, !is.na(yield_bush))  %>% 
+  
+  ## change 'rotation' data type from double to factor
+  dplyr::mutate(rotation = as.factor(rotation))
+
+## Create a smooth line plot with 'year' on the x axis and 'yield_bush' on the y axis
+## color code the lines by 'rotation'
+## use line type to differentiate between treated and untreated corn
+ggplot2::ggplot(data = mpcorn) +
+  ggplot2::geom_smooth(ggplot2::aes(x= year, y = yield_bush, color = rotation, linetype = treated))+
+
+  ## add title and subtitle
+  ggplot2::labs(title = "Morrow Plots Corn Yield Trends in Bushels per Acre",
+       subtitle = "Treated vs. untreated and by number of crops in rotation")+
+  
+  ## add one of the built-in themes
+  ggplot2::theme_light()
+
+```
+
+Render the document.
+
+*Q3. Does the code to generate the figure appear above the figure? (Keep the > symbol in your answer.)*
+
+> YOUR ANSWER
+
+Now, change `echo: true` to `echo: false` in the above code chunk and render again.
+
+*Q4. Does the code to generate the figure still appear above the figure? (Keep the > symbol in your answer.)*
+
+> YOUR ANSWER
+
+Now, let's change the chunk label from `label: corn-yield-trends` to `label: fig-corn-yield-trends`.
+
+Let's also add another parameter for a caption. Add the following text below the label:
+
+#| fig-cap: "Treated vs. untreated and by number of crops in rotation. Treated corn produces higher yields than untreated corn, and continuous corn provides the lowest yields. Corn in a 2-crop rotation performs better, and corn in a 3-crop rotation performs best."
+
+Render the document again. A caption should now appear.
+
+*Q5. Is the figure automatically numbered?*
+
+> YOUR ANSWER
+
+With our figure now numbered, we can render the figure number automatically in our document using the \@ sign. This is very powerful. Here is an example:
+
+In this report, @fig-corn-yield-trends demonstrates that we can render figures and link to them elsewhere in our document.
+
+*Q6. Once you render the report and view the HTML file, what appears in place of `@fig-corn-yield-trends` above? What happens when you hover and click on it?*
+
+> YOUR ANSWER
+
+*Q7. What is one potential advantage of generating figures on the fly in a notebook?*
+
+> YOUR ANSWER
+
+## Step 3: Environment
+
+For your analysis to be reproducible, it is important to keep track of package versions. As package versions change, so may their functions and data. We can do this with the package `renv`. Run the following to load `renv`:
+
+```{r}
+# Load the package
+library(renv)
+```
+
+You know, I don't think we really need to have the code for loading the package in our report. Add `echo: false` to the above chunk, just like for the corn-yield-trends chunk.
+
+*Q8. After adding echo: false and rendering, is the code above rendered in the report? (Keep the > symbol in your answer.)*
+
+> YOUR ANSWER
+
+The code should no longer be rendered, but there are some R messages still printed. We can hide these by also adding `message: false`.
+
+Now let's move on to `renv`. The chunk below will not be run automatically when the document is rendered due to the `eval: false` parameter. Run the following command manually in your R console. Note: you will need to have the RStudio project loaded for this to work properly, since your working directory must be appropriately set.
+
+```{r}
+#| eval: false
+
+renv::init()
+```
+
+What just happened? `renv` just magically detected all of the packages being used by your project and installed them into your very own **project library**, located at `renv/library`. Just like `conda` with Python, this allows you to have different projects with different versions of packages. Installing, updating, or removing packages in one project won't affect other projects. It also created a `renv.lock` file, which includes all the metadata about each package needed to recreate your environment. If you like, peek inside the file to see what this consists of. You can read about this in detail in the [package documentation](https://rstudio.github.io/renv/articles/renv.html).
+
+Git commit and push. Now your entire R environment is permanently saved and can be recreated by a future version of yourself or someone looking to reproduce your analysis. Exciting stuff.
+
+Now, let's install and load one more package. Set `eval` to `true` in the code chunk below and run the code chunk manually.
+
+```{r}
+#| eval: false
+
+if (!"uiucthemes" %in% installed.packages()) {
+  install.packages('uiucthemes')
+}
+
+library(uiucthemes)
+```
+
+After setting `eval` to `true` in the chunk above, *save this notebook file* and run the command `renv::snapshot()` in your Console. This takes a new snapshot of your currently installed packages and saves them to `renv.lock`. Hit Y to proceed if prompted.
+
+*Q9. Check GitHub Desktop. Describe the changes that have now been made to `renv.lock`. Why did these packages not get recorded earlier?*
+
+> YOUR ANSWER
+
+In order to recreate your environment, your collaborator will need to clone your repository and run `renv::restore()` to recreate your environment. Feel free to try it on another computer if you like (not part of this lab).
+
+## Render and submit
+
+Once you are done, click "Render" to create an HTML file that includes all of your answers to the questions in this document. You will upload this HTML file to Canvas.
+
+## Optional: Render as PDF
+
+Quarto supports many different formats. Let's close by rendering this document a PDF. Replace `format: html` with `format: pdf` in the YAML header and click Render. You may need to have LaTex installed. If this does not work on your computer, don't worry - this is not required for today's lab.
+
+## Resources
+
+- [Quarto getting started in RStudio](https://quarto.org/docs/get-started/hello/rstudio.html)
+- [Quarto introduction](https://r4ds.hadley.nz/quarto.html)
+- [Quarto reference](https://quarto.org/docs/reference/)
+- [Markdown reference](https://commonmark.org/help/)
+
+
