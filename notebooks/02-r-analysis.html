@@ -2430,7 +2430,7 @@ Figure 1: “Treated vs. untreated and by number of crops in rotation. Treated
 <p>You know, I don’t think we really need to have the code for loading the package in our report. Add <code>echo: false</code> to the above chunk, just like for the corn-yield-trends chunk.</p>
 <p><em>Q8. After adding echo: false and rendering, is the code above rendered in the report? (Keep the &gt; symbol in your answer.)</em></p>
 <blockquote class="blockquote">
-<p>YOUR ANSWER</p>
+<p>The code cell that said, ‘library(renv)’ is no longer rendered.</p>
 </blockquote>
 <p>The code should no longer be rendered, but there are some R messages still printed. We can hide these by also adding <code>message: false</code>.</p>
 <p>Now let’s move on to <code>renv</code>. The chunk below will not be run automatically when the document is rendered due to the <code>eval: false</code> parameter. Run the following command manually in your R console. Note: you will need to have the RStudio project loaded for this to work properly, since your working directory must be appropriately set.</p>
@@ -2450,7 +2450,7 @@ Figure 1: “Treated vs. untreated and by number of crops in rotation. Treated
 <p>After setting <code>eval</code> to <code>true</code> in the chunk above, <em>save this notebook file</em> and run the command <code>renv::snapshot()</code> in your Console. This takes a new snapshot of your currently installed packages and saves them to <code>renv.lock</code>. Hit Y to proceed if prompted.</p>
 <p><em>Q9. Check GitHub Desktop. Describe the changes that have now been made to <code>renv.lock</code>. Why did these packages not get recorded earlier?</em></p>
 <blockquote class="blockquote">
-<p>YOUR ANSWER</p>
+<p>The changes to the renv.lock include adding a few packages to the ‘Packages’ object. Each one has a bunch of attributes like ‘Package’, ‘Version’, ‘Source’, etc. They also include what other packages they depend on, import, or suggest. They did not get recorded earlier because I installed the packages locally, but renv::snapshot() records the packages that are installed and being used, and then writes them to renv.lock, so the changes didn’t appear until I did that.</p>
 </blockquote>
 <p>In order to recreate your environment, your collaborator will need to clone your repository and run <code>renv::restore()</code> to recreate your environment. Feel free to try it on another computer if you like (not part of this lab).</p>
 </section>

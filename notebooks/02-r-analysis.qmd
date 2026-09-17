@@ -171,7 +171,7 @@ Git commit and push. Now your entire R environment is permanently saved and can 
 Now, let's install and load one more package. Set `eval` to `true` in the code chunk below and run the code chunk manually.
 
 ```{r}
-#| eval: false
+#| eval: true
 
 if (!"uiucthemes" %in% installed.packages()) {
   install.packages('uiucthemes')
@@ -184,7 +184,7 @@ After setting `eval` to `true` in the chunk above, *save this notebook file* and
 
 *Q9. Check GitHub Desktop. Describe the changes that have now been made to `renv.lock`. Why did these packages not get recorded earlier?*
 
-> YOUR ANSWER
+> The changes to the renv.lock include adding a few packages to the 'Packages' object. Each one has a bunch of attributes like 'Package', 'Version', 'Source', etc. They also include what other packages they depend on, import, or suggest. They did not get recorded earlier because I installed the packages locally, but renv::snapshot() records the packages that are installed and being used, and then writes them to renv.lock, so the changes didn't appear until I did that.
 
 In order to recreate your environment, your collaborator will need to clone your repository and run `renv::restore()` to recreate your environment. Feel free to try it on another computer if you like (not part of this lab).
 
