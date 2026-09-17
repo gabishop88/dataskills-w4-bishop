@@ -1,6 +1,9 @@
 ---
 title: "Data Skills Week 4 - R Analysis"
 date: "2026-09-01"
+date-modified: "2026-09-17"
+author: Graham Bishop
+abstract: Sample Analysis for Dataskills Week 4
 format: 
   html:
       embed-resources: true
@@ -28,7 +31,7 @@ Now re-render the document. Answer the following question:
 
 *Q1. What happened when you added the `date-modified` line to the YAML header? Keep the > symbol in your answer.*
 
-> YOUR ANSWER HERE
+> It now has two columns under the title. The first says 'PUBLISHED' with the original date and the second column says 'MODIFIED' with today's date.
 
 Let's add some more information. Add your name via an `author:` tag, as well as a very brief `abstract:`. Both of these should go in the YAML header below your date lines. Click render and observe the result.
 
@@ -50,9 +53,9 @@ summary(morrowplots)
 
 Create a code chunk using the code below and save the `morrowplots` data frame as a CSV file in your project directory in an appropriate location. This assumes you have a `data` directory in your project; modify as needed. Note the use of the `here` package, which helps simplify relative file paths.
 
+```{r}
 write.csv(morrowplots,here("data","morrowplots.csv"))
-
-> ADD CODE CHUNK HERE WITH ABOVE CODE
+```
 
 ### Inserting text inline using code
 
@@ -62,7 +65,7 @@ The `morrowplots` dataset has `r nrow(morrowplots)` rows and `r ncol(morrowplots
 
 *Q2. Render the document. Which values were inserted when you rendered the line above? (Keep the > symbol in your answer.)*
 
-> YOUR ANSWER HERE
+> `nrow(morrowplots)` rendered to say '3216' and `ncol(morrowplots)` was replaced with '26'.
 
 ### Generating some plots
 
@@ -71,8 +74,9 @@ Let's make some plots. We'll use the packages `ggplot2` and `dplyr` for this.
 We are going to make some visualizations from the `morrowplots` [vignette](https://cran.r-project.org/web/packages/morrowplots/vignettes/morrow-plots-data-visualizations.html). Note that the following code chunk has two parameters specified (`label` and `echo`). The `label` parameter names the chunk.
 
 ```{r}
-#| label: corn-yield-trends
-#| echo: true
+#| label: fig-corn-yield-trends
+#| fig-cap: “Treated vs. untreated and by number of crops in rotation. Treated corn produces higher yields than untreated corn, and continuous corn provides the lowest yields. Corn in a 2-crop rotation performs better, and corn in a 3-crop rotation performs best.”
+#| echo: false
 
 ## Filter the dataset to only include corn
 mpcorn <- 
@@ -102,13 +106,13 @@ Render the document.
 
 *Q3. Does the code to generate the figure appear above the figure? (Keep the > symbol in your answer.)*
 
-> YOUR ANSWER
+> Above the figure, it has the whole code box and some text that says: \`geom_smooth()\` using method = 'loess' and formula = 'y ~ x'
 
 Now, change `echo: true` to `echo: false` in the above code chunk and render again.
 
 *Q4. Does the code to generate the figure still appear above the figure? (Keep the > symbol in your answer.)*
 
-> YOUR ANSWER
+> Now, the code box is gone and just that message and the figure remains.
 
 Now, let's change the chunk label from `label: corn-yield-trends` to `label: fig-corn-yield-trends`.
 
@@ -120,7 +124,7 @@ Render the document again. A caption should now appear.
 
 *Q5. Is the figure automatically numbered?*
 
-> YOUR ANSWER
+> Yes, it says, 'Figure 1' even though that is not explicitly in the caption I pasted.
 
 With our figure now numbered, we can render the figure number automatically in our document using the \@ sign. This is very powerful. Here is an example:
 
@@ -128,17 +132,18 @@ In this report, @fig-corn-yield-trends demonstrates that we can render figures a
 
 *Q6. Once you render the report and view the HTML file, what appears in place of `@fig-corn-yield-trends` above? What happens when you hover and click on it?*
 
-> YOUR ANSWER
+> Whoa, it says 'Figure 1', highlighted like a link. When I hover over it, the Figure and caption appear in a popup. If i click on it, it brings me back up to the figure.
 
 *Q7. What is one potential advantage of generating figures on the fly in a notebook?*
 
-> YOUR ANSWER
+> If the data changes, such as a new year of data being added to the `morrowplots` dataset, then the figure will automatically include that new data the next time it is rendered.
 
 ## Step 3: Environment
 
 For your analysis to be reproducible, it is important to keep track of package versions. As package versions change, so may their functions and data. We can do this with the package `renv`. Run the following to load `renv`:
 
 ```{r}
+#| echo: false
 # Load the package
 library(renv)
 ```
@@ -147,7 +152,7 @@ You know, I don't think we really need to have the code for loading the package 
 
 *Q8. After adding echo: false and rendering, is the code above rendered in the report? (Keep the > symbol in your answer.)*
 
-> YOUR ANSWER
+> The code cell that said, 'library(renv)' is no longer rendered.
 
 The code should no longer be rendered, but there are some R messages still printed. We can hide these by also adding `message: false`.
 
