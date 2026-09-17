@@ -10,6 +10,7 @@ RUN apt-get update \
         libxml2-dev \
         libuv1-dev \
         libzmq3-dev \
+        libglpk-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd vscode \
