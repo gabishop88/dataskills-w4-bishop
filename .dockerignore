@@ -1,0 +1,10 @@
+.git
+.venv/
+renv/library/
+renv/staging/
+renv/sandbox/
+renv/cellar/
+.ipynb_checkpoints/
+.quarto/
+*_cache/
+*_files/

@@ -1,0 +1,40 @@
+{
+  "name": "${localWorkspaceFolderBasename}",
+  "remoteUser": "vscode",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "runArgs": [
+    "--name",
+    "${localWorkspaceFolderBasename}"
+  ],
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "features": {
+    "ghcr.io/devcontainers/features/git:latest": {}
+  },
+  "containerEnv": {
+    "UV_PROJECT_ENVIRONMENT": "/home/vscode/.venv",
+    "RENV_PATHS_LIBRARY_ROOT": "/home/vscode/renv/library"
+  },
+  "forwardPorts": [
+    8888
+  ],
+  "postCreateCommand": "uv sync && R -e 'renv::restore()' && R -e 'IRkernel::installspec(user = TRUE)'",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "REditorSupport.r",
+        "quarto.quarto"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/home/vscode/.venv/bin/python",
+        "jupyter.notebookFileRoot": "${workspaceFolder}",
+        "r.rterm.linux": "/usr/local/bin/R",
+        "r.bracketedPaste": true
+      }
+    }
+  }
+}

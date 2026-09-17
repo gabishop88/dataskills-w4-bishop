@@ -1,0 +1,11 @@
+[project]
+name = "dataskills-w4-bishop"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "jupyterlab",
+    "ipykernel",
+    "pandas",
+    "matplotlib",
+    "seaborn",
+]
